@@ -1,93 +1,131 @@
-# Online Computer Shop — Final Merged Project from Razon ZIP
+# Online Computer Shop
 
-This is the final runnable merged project built from the task files inside `razon.zip`, arranged in the same MVC format as the second reference project.
+Online Computer Shop is a PHP and MySQL e-commerce application with customer and administrator workflows. It uses an MVC-style folder layout, server-rendered PHP views, MySQLi prepared statements, JavaScript form behavior, and AJAX-powered product search.
 
-## How to Run in XAMPP
+## Links
 
-1. Extract this folder into:
+- [Repository](https://github.com/romanrazan/Web_Tech_Project_Online_Computer_Shop)
+- Live demo: no public deployment is currently available
+
+## Main Features
+
+- Customer registration, login, logout, profile updates, and remember-me support
+- Product browsing by category and brand
+- AJAX search and filtering with JSON responses
+- Shopping-cart add, update, and remove workflows
+- Checkout with recorded payment-method choices
+- Customer order history and product reviews
+- Administrator dashboards for categories, brands, products, customers, reviews, and orders
+- CSRF protection, session-based authorization, escaped output, and prepared database statements
+
+> Payment options such as Cash on Delivery, bKash, Nagad, and DBBL/Rocket are stored as order choices. The project does not integrate a real payment gateway.
+
+## Technology Stack
+
+| Area | Technology | Why it fits |
+| --- | --- | --- |
+| Server | PHP 8+ | Handles routing, sessions, validation, and server-rendered pages without a framework dependency |
+| Database | MySQL with MySQLi | Provides relational storage, foreign keys, transactions, and prepared statements |
+| Frontend | HTML5, CSS3, JavaScript | Keeps the interface lightweight and directly compatible with PHP views |
+| Dynamic search | AJAX and JSON | Updates product results without a full page reload |
+| Local runtime | Apache/MySQL through XAMPP or equivalent | Supplies the web server, PHP runtime, and database required by the application |
+
+There is no `composer.json`, JavaScript package manifest, build pipeline, or automated test suite in this repository. The application runs directly through PHP.
+
+## Project Structure
 
 ```text
-C:/xampp/htdocs/razon_online_computer_shop_final/
+Web_Tech_Project_Online_Computer_Shop/
+├── api/                 # AJAX endpoints
+├── config/              # MySQL connection and session/security helpers
+├── controllers/         # Request and workflow handlers
+├── database/            # Schema and sample-data SQL files
+├── models/              # MySQL queries and data operations
+├── public/
+│   ├── css/             # Shared and responsive styles
+│   ├── js/              # Client-side validation and AJAX behavior
+│   └── uploads/         # Product and profile image storage
+├── views/               # Customer, administrator, auth, and layout views
+├── computer_shop.sql    # Additional database export
+└── index.php            # Front controller and route switch
 ```
 
-2. Start **Apache** and **MySQL** from XAMPP.
-3. Open phpMyAdmin:
+## Local Setup
 
-```text
-http://localhost/phpmyadmin
+### Prerequisites
+
+- PHP 8.0 or newer with the `mysqli` extension
+- MySQL 8 or MariaDB
+- Apache (XAMPP is the simplest Windows option)
+- Git
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/romanrazan/Web_Tech_Project_Online_Computer_Shop.git
+cd Web_Tech_Project_Online_Computer_Shop
 ```
 
-4. Import this file:
+For XAMPP, place or clone the repository under `C:\xampp\htdocs\Web_Tech_Project_Online_Computer_Shop`.
+
+### 2. Create and import the database
+
+Start MySQL, open phpMyAdmin, and import:
 
 ```text
 database/computer_shop_final_with_sample_data.sql
 ```
 
-5. Open the project:
+The script creates the `computer_shop` database, its tables, and local demonstration data. It drops the named project tables before recreating them, so use it only for a disposable local database.
 
-```text
-http://localhost/razon_online_computer_shop_final/
+For a schema without sample rows, use `database/computer_shop_schema_only_safe.sql`.
+
+### 3. Configure the database connection
+
+This project does not use environment variables. Update only the local values in `config/database.php` if they differ from the defaults:
+
+```php
+$DB_HOST = "localhost";
+$DB_USER = "root";
+$DB_PASS = "";
+$DB_NAME = "computer_shop";
 ```
 
-## Demo Login
+Do not commit real production credentials. For a deployed environment, move these values into server-managed environment variables or a private configuration file.
+
+### 4. Run the application
+
+With Apache and MySQL running, open:
+
+```text
+http://localhost/Web_Tech_Project_Online_Computer_Shop/
+```
+
+The PHP development server can also serve the project root when MySQL is already running:
+
+```bash
+php -S 127.0.0.1:8000
+```
+
+Then open `http://127.0.0.1:8000/`.
+
+## Demo Accounts
+
+The sample-data import creates these local-only accounts:
 
 | Role | Email | Password |
-|---|---|---|
-| Admin | `admin@shop.com` | `12345678` |
+| --- | --- | --- |
+| Administrator | `admin@shop.com` | `12345678` |
 | Customer | `customer@shop.com` | `12345678` |
 
-## Project Format
+Change or remove demonstration accounts before any public deployment.
 
-The root folder is the **final merged runnable project**.
+## Development and Verification
 
-The `task_contributions/` folder contains the original task-wise files copied from `razon.zip`:
+There is no compilation step. After changing PHP files, refresh the browser. To lint every PHP file in PowerShell:
 
-| Task | Source Folder | Main Module |
-|---|---|---|
-| Task 1 | `task1.zip` | Authentication, registration, login, profile, home/category base |
-| Task 2 | `bristy(TASK2).zip` | Admin category, brand, product CRUD |
-| Task 3 | `numan(TASK3).zip` | Product browsing, AJAX search, cart |
-| Task 4 | `task4.zip` | Checkout, order, review, admin review/customer management |
-
-## Main Features
-
-- User registration, login, logout, profile update and remember-me support
-- Admin dashboard
-- Category and sub-category management
-- Brand management
-- Product CRUD with image upload
-- Customer product browse, category/brand filter and AJAX search
-- Cart add, update and remove
-- Product review add/delete
-- Checkout with Cash on Delivery, bKash, Nagad and DBBL/Rocket
-- Admin order accept/delete
-- Admin customer and review management
-
-## Important Folders
-
-```text
-config/                 Database and session helpers
-controllers/            Route/controller logic
-models/                 Database functions
-views/                  UI pages
-api/                    AJAX endpoints
-public/css/             CSS
-public/js/              JavaScript/AJAX validation
-public/uploads/         Product/profile uploads
-database/               SQL files
-docs/                   Documentation and task ownership
-task_contributions/     Original task snapshots from razon.zip
+```powershell
+Get-ChildItem -Recurse -Filter *.php | ForEach-Object { php -l $_.FullName }
 ```
 
-## CSS / UI Update
-
-The final app uses separated external CSS files inside `public/css/`:
-
-- `style.css` - main CSS loader
-- `base.css` - variables, reset, typography, background
-- `layout.css` - navbar, container, hero, footer
-- `components.css` - buttons, forms, tables, alerts, badges
-- `pages.css` - product, cart, review, order, admin page styles
-- `responsive.css` - tablet/mobile layout
-
-Final app PHP views do not use inline CSS. Styling is controlled from the external CSS files.
+Manual verification should cover registration/login, product filtering and AJAX search, cart updates, checkout, reviews, order history, and each administrator page. No automated test command is currently included.
